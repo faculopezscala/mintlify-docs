@@ -1,0 +1,64 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Bugster",
+  "logo": {
+    "dark": "/logo/LOGOTYPE-VIOLET-LIGHT.png",
+    "light": "/logo/LOGOTYPE-VIOLET-DARK.png"
+  },
+  "description": "Bugster is an AI tester that simulates a real user in a real browser, providing insights directly in your PR. It's designed for developers at VC-backed startups who want to ship with confidence without writing or maintaining flaky test suites.",
+  "colors": {
+    "primary": "#363D61",
+    "dark": "#363D61",
+    "light": "#C6CBEB"
+  },
+  "favicon": "/logo/logo2.jpeg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "installation",
+              "cli-usage-reference"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Community",
+          "href": "https://discord.gg/BG3vys73",
+          "icon": "slack"
+        },
+        {
+          "anchor": "Blog",
+          "href": "https://www.bugster.dev/blog",
+          "icon": "newspaper"
+        }
+      ]
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "https://discord.gg/BG3vys73"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Start Testing",
+      "href": "https://www.bugster.dev/"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/Bugsterapp/bugster-cli"
+    }
+  }
+}

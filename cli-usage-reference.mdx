@@ -1,0 +1,106 @@
+Once installed, you can use Bugster CLI by running:
+
+```bash
+bugster --help
+```
+
+This command will display all available top-level commands, global options, and a list of subcommands.
+
+<Tip>You can also get help for specific subcommands (e.g., `bugster test --help`) to see options for that particular command. E.g., `bugster test --help`.</Tip>
+
+## Commands Overview
+
+The Bugster CLI provides commands to initialize your configuration and run tests. Here are the main commands:
+
+### `bugster init`
+
+<Card title="Initialize Bugster Configuration" icon="gear">
+  This command initializes the Bugster CLI configuration, setting up the necessary files and settings for you to start using Bugster.
+</Card>
+
+Run the command:
+```bash
+bugster init
+```
+
+**Key Actions:**
+
+*   Prompts for a "Base URL" (defaulting to `http://localhost:3000`).
+*   Asks if you want to add credentials (e.g., username and password) and guides you through the process. If no credentials are added, it sets up default admin credentials.
+*   Creates a `.bugster` directory in your current project.
+*   Saves your configuration (Base URL, credentials) into a `config.yml` file within the `.bugster` directory.
+*   Creates an example test file (e.g., `example_test.yml`) in a `.bugster/examples` directory to help you get started.
+*   Displays the location of the created configuration and example test files, along with a table of the configured credentials.
+
+### `bugster analyze`
+
+<Card title="Analyze Your Codebase" icon="magnifying-glass">
+  This command analyzes your codebase for potential issues and provides recommendations.
+</Card>
+
+Run the command:
+```bash
+bugster analyze
+```
+
+**Key Actions:**
+
+*   Scans your app and creates a basic test suite from the analysis.
+
+### `bugster test`
+
+<Card title="Run Bugster Tests" icon="terminal">
+  This command is used to run your Bugster tests.
+</Card>
+
+Run the command (example with a specific test path):
+```bash
+bugster test your_test_file.yml
+```
+
+**Arguments/Options:**
+
+*   **`test_path`** (optional): Specify a particular test file or a directory containing test files. If not provided, it may look for tests in a default location (e.g., `.bugster/examples`).
+    *   Example: `bugster test tests/smoke_tests/`
+*   **`--headless`** (optional flag): Runs browser tests without opening a visible browser window.
+    *   Example: `bugster test --headless`
+*   **`--silent`** (optional flag): Suppresses some of the detailed output logging to the console.
+    *   Example: `bugster test --silent`
+
+**Key Actions During Execution:**
+
+*   Loads the configuration previously set up using the `init` command.
+*   Finds and loads your test files (typically YAML or JSON).
+*   For each test case:
+    *   Establishes a WebSocket connection with a "Bugster Agent" (a running Bugster server/service).
+    *   Initializes an "MCP (Multi-Capability Playwright) client," using Playwright for browser automation.
+    *   Sends the test definition and configuration to the Bugster Agent.
+    *   Receives and executes instructions (e.g., "click a button", "fill a form field") from the Agent via the Playwright MCP client.
+    *   Sends the result of each step back to the Agent.
+    *   Upon completion, receives the final test result (pass/fail) and reason from the Agent.
+*   After all tests are run, displays a summary table of the results (Test Name, Result, Reason, Time taken) and the total time taken.
+*   If any test fails, the command exits with an error code. 
+
+## Dependencies
+
+<Info>
+  Bugster CLI relies on several Python packages. The primary dependencies are managed via `setup.py` and are also listed in `requirements.txt`.
+</Info>
+
+Key dependencies include:
+
+*   `click`
+*   `httpx`
+*   `pydantic`
+*   `rich`
+*   `typer`
+
+<Tip>
+  For a full list of dependencies, please refer to the `requirements.txt` file or the `install_requires` section in `setup.py`.
+</Tip>
+
+## Next Steps
+
+<Card title="Install Bugster CLI" icon="download" href="installation">
+  Get started by installing the CLI on your system.
+</Card> 
