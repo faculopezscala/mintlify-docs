@@ -35,7 +35,7 @@ bugster init
 ### `bugster analyze`
 
 <Card title="Analyze Your Codebase" icon="magnifying-glass">
-  This command analyzes your codebase for potential issues and provides recommendations.
+  This command lets Bugster agent analyze your codebase, understand it, and create a suite of tests based on the analysis.
 </Card>
 
 Run the command:
@@ -45,7 +45,29 @@ bugster analyze
 
 **Key Actions:**
 
-*   Scans your app and creates a basic test suite from the analysis.
+*   Scans your codebase to understand its structure and functionality
+*   Creates a suite of tests (currently 5 tests in v0) based on the analysis
+*   The tests are created in Bugster format (YAML) which the agent uses to perform flows and validate results
+
+**Example test file created:**
+
+```yaml
+- name: Checkout Process Test
+  task: Verify that users can complete the checkout process
+  expected_result: Order should be successfully placed
+  steps:
+    - Navigate to /products page
+    - Add a product to the cart
+    - Navigate to /cart page
+    - Verify product is in the cart
+    - Click "Proceed to Checkout" button
+    - Fill in shipping information
+    - Select shipping method
+    - Enter payment information
+    - Review order summary
+    - Click "Place Order" button
+    - Verify order confirmation page is displayed
+```
 
 ### `bugster test`
 
