@@ -7,376 +7,88 @@ description: 'Keep your tests synchronized with code changes using bugster updat
   Ensure you have [generated initial tests](/commands/test-generation) before using the update command.
 </Note>
 
-## Overview
-
-The `bugster update` command intelligently maintains your test suite by detecting changes in your codebase and updating test specifications accordingly. It helps keep your tests current as your application evolves.
-
 ## Command Usage
 
 ### `bugster update`
 
-<Card title="Synchronize Test Changes" icon="refresh">
-  Update your test specifications based on the latest changes in your codebase.
-</Card>
+Update your test specifications based on the latest changes in your codebase.
 
 ```bash
 bugster update [OPTIONS]
 ```
 
-## How Test Updates Work
+**Options:**
+- `--update-only` - Only update existing test specifications, skip suggestions and deletions
+- `--suggest-only` - Only suggest new test specifications, skip updates and deletions
+- `--delete-only` - Only delete obsolete test specifications, skip updates and suggestions
+- `--show-logs` - Show detailed logs during the update process
 
-<Steps>
-  <Step title="Codebase Comparison">
-    Compares current code against the cached state from the last analysis to identify changes.
-  </Step>
-  
-  <Step title="Change Analysis">
-    Analyzes the impact of code changes on existing tests and identifies new testable functionality.
-  </Step>
-  
-  <Step title="Test Modification">
-    Updates existing test specifications to reflect code changes and removes obsolete tests.
-  </Step>
-  
-  <Step title="New Test Suggestions">
-    Suggests new test specifications for newly added features or functionality.
-  </Step>
-  
-  <Step title="Cleanup">
-    Removes test specifications that are no longer relevant due to removed functionality.
-  </Step>
-</Steps>
+## Examples
 
-## Update Options
-
-<AccordionGroup>
-  <Accordion icon="pencil" title="Update Only">
-    **Option:** `--update-only`
-    
-    Only update existing test specifications, skip suggestions and deletions.
-    
-    ```bash
-    bugster update --update-only
-    ```
-    
-    **Use when:** You want to preserve the current test scope and only fix broken tests.
-  </Accordion>
-
-  <Accordion icon="plus-circle" title="Suggest Only">
-    **Option:** `--suggest-only`
-    
-    Only suggest new test specifications, skip updates and deletions.
-    
-    ```bash
-    bugster update --suggest-only
-    ```
-    
-    **Use when:** You've added new features and want to see what tests should be created.
-  </Accordion>
-
-  <Accordion icon="trash" title="Delete Only">
-    **Option:** `--delete-only`
-    
-    Only delete obsolete test specifications, skip updates and suggestions.
-    
-    ```bash
-    bugster update --delete-only
-    ```
-    
-    **Use when:** You've removed features and want to clean up old tests.
-  </Accordion>
-
-  <Accordion icon="file-text" title="Show Logs">
-    **Option:** `--show-logs`
-    
-    Display detailed logs during the update process.
-    
-    ```bash
-    bugster update --show-logs
-    ```
-    
-    **Use when:** You want to understand exactly what changes are being made.
-  </Accordion>
-</AccordionGroup>
-
-## Update Scenarios
-
-### After Code Changes
 ```bash
-# Full update after development work
+# Full update: modify, suggest, and delete specs
 bugster update
 
-# See what would be updated with detailed logs
-bugster update --show-logs
-```
-
-### New Feature Development
-```bash
-# Get suggestions for new functionality
-bugster update --suggest-only
-
-# Review and then apply all changes
-bugster update
-```
-
-### Refactoring or Cleanup
-```bash
-# Update tests for refactored code
+# Only update existing test specifications
 bugster update --update-only
 
-# Remove tests for deleted features
+# Only suggest new tests with logging
+bugster update --suggest-only --show-logs
+
+# Only remove obsolete specifications
 bugster update --delete-only
 ```
 
-## Types of Updates
+## How It Works
 
-### Modified Tests
-When code changes affect existing functionality:
+<Steps>
+  <Step title="Detect Changes">
+    Compares current code against the cached state from the last analysis.
+  </Step>
+  
+  <Step title="Analyze Impact">
+    Determines how code changes affect existing tests and identifies new functionality.
+  </Step>
+  
+  <Step title="Update Tests">
+    Modifies existing test specifications and suggests new ones as needed.
+  </Step>
+  
+  <Step title="Clean Up">
+    Removes test specifications that are no longer relevant.
+  </Step>
+</Steps>
 
-**Before (original test):**
+## Update Examples
+
+### Modified Test
+**Before:**
 ```yaml
 - name: User Login
   steps:
     - Navigate to /login
-    - Fill in email field
-    - Fill in password field
     - Click "Sign In" button
 ```
 
-**After (updated test):**
+**After:**
 ```yaml
 - name: User Login
   steps:
     - Navigate to /auth/login  # Updated route
-    - Fill in email field
-    - Fill in password field
     - Click "Login" button     # Updated button text
-    - Verify 2FA prompt appears # New step for added 2FA
 ```
 
-### Suggested Tests
-For new functionality detected in the codebase:
-
+### New Test Suggestion
 ```yaml
-# Newly suggested test
 - name: Password Reset Flow
   task: Verify users can reset their password via email
-  expected_result: User receives reset email and can set new password
   steps:
     - Navigate to /forgot-password
     - Enter email address
     - Click "Send Reset Link"
-    - Check email for reset link
-    - Follow reset link
-    - Enter new password
-    - Confirm password change
 ```
-
-### Deleted Tests
-Tests removed when functionality is no longer present:
-
-```bash
-Deleted: .bugster/tests/legacy_checkout.yml
-Reason: Related components no longer exist in codebase
-```
-
-## Change Detection
-
-Bugster detects various types of code changes:
-
-<CardGroup cols={2}>
-  <Card title="UI Changes" icon="window">
-    - Modified component structure
-    - Changed element selectors
-    - Updated form fields
-    - New or removed UI elements
-  </Card>
-  
-  <Card title="Route Changes" icon="route">
-    - Updated URL patterns
-    - New or removed endpoints
-    - Modified navigation flows
-    - Changed page structures
-  </Card>
-  
-  <Card title="Logic Changes" icon="code">
-    - Modified business logic
-    - Updated validation rules
-    - Changed data flows
-    - New or removed features
-  </Card>
-  
-  <Card title="Integration Changes" icon="puzzle-piece">
-    - API endpoint modifications
-    - Third-party service updates
-    - Authentication changes
-    - External dependency updates
-  </Card>
-</CardGroup>
-
-## Review Process
-
-### Interactive Review
-```bash
-# Review changes before applying
-bugster update --dry-run
-
-# Apply changes interactively
-bugster update --interactive
-```
-
-### Staged Updates
-```bash
-# Review suggestions only
-bugster update --suggest-only --show-logs
-
-# Apply specific types of updates
-bugster update --update-only
-bugster update --delete-only
-```
-
-## Best Practices
-
-<Card title="Regular Updates" icon="calendar">
-  **Frequency:** Run `bugster update` regularly, ideally after each significant code change or at least weekly during active development.
-</Card>
-
-<Card title="Review Changes" icon="eye">
-  **Validation:** Always review suggested changes, especially deletions, before applying them. Use `--show-logs` to understand the reasoning.
-</Card>
-
-<Card title="Incremental Updates" icon="steps">
-  **Approach:** Use specific flags (`--update-only`, `--suggest-only`) to apply changes incrementally when working on large refactors.
-</Card>
-
-## Integration with Development Workflow
-
-### Git Hooks
-```bash
-# .git/hooks/post-merge
-#!/bin/sh
-bugster update --suggest-only
-```
-
-### CI/CD Integration
-```yaml
-# Example CI workflow
-- name: Update Tests
-  run: |
-    bugster update --show-logs
-    git add .bugster/tests/
-    git commit -m "Update tests for latest changes" || exit 0
-```
-
-### IDE Integration
-```bash
-# VS Code task.json
-{
-  "label": "Update Bugster Tests",
-  "type": "shell",
-  "command": "bugster update --show-logs",
-  "group": "test"
-}
-```
-
-## Advanced Update Options
-
-### Selective Updates
-```bash
-# Update tests for specific directories
-bugster update --path src/components/auth
-
-# Focus on specific test types
-bugster update --test-type integration
-
-# Exclude certain patterns
-bugster update --exclude "*legacy*"
-```
-
-### Confidence Levels
-```bash
-# Only high-confidence updates
-bugster update --confidence high
-
-# Include experimental suggestions
-bugster update --confidence low
-```
-
-## Troubleshooting
-
-<AccordionGroup>
-  <Accordion icon="exclamation-triangle" title="No Updates Detected">
-    **Causes:**
-    - No significant code changes since last update
-    - Changes in non-testable code areas
-    - Cache issues preventing change detection
-    
-    **Solutions:**
-    - Use `--force` to bypass cache
-    - Check if changes are in testable components
-    - Run with `--show-logs` to see analysis details
-  </Accordion>
-
-  <Accordion icon="file-x" title="Incorrect Updates">
-    **Causes:**
-    - Complex refactoring confusing the analysis
-    - Unusual code patterns
-    - Incomplete code changes
-    
-    **Solutions:**
-    - Review updates with `--show-logs`
-    - Use selective update flags
-    - Manually review and edit generated tests
-  </Accordion>
-
-  <Accordion icon="clock" title="Update Taking Too Long">
-    **Causes:**
-    - Large codebase changes
-    - Complex dependency analysis
-    - Network issues during AI processing
-    
-    **Solutions:**
-    - Use `--path` to focus on specific directories
-    - Run updates incrementally
-    - Check network connectivity
-  </Accordion>
-</AccordionGroup>
-
-## Update History and Rollback
-
-### Tracking Changes
-```bash
-# View update history
-bugster update --history
-
-# Show last update details
-bugster update --show-last
-```
-
-### Rollback Options
-```bash
-# Undo last update
-bugster update --rollback
-
-# Restore from specific backup
-bugster update --restore backup-2024-01-15
-```
-
-## Quality Assurance
-
-<Card title="Update Validation" icon="shield-check">
-  Bugster validates all updates against your codebase before applying them, ensuring that updated tests remain accurate and executable.
-</Card>
-
-**Validation Checks:**
-- Selector availability in current code
-- Route accessibility
-- Form field existence
-- Business logic consistency
 
 ## Next Steps
-
-After updating your tests:
 
 <CardGroup cols={2}>
   <Card title="Run Updated Tests" icon="play" href="/commands/test-execution">
@@ -385,13 +97,5 @@ After updating your tests:
   
   <Card title="Team Collaboration" icon="users" href="/commands/team-collaboration">
     Share updated tests with your team
-  </Card>
-  
-  <Card title="Workflows Guide" icon="workflow" href="/guides/workflows">
-    Learn maintenance workflow patterns
-  </Card>
-  
-  <Card title="Configuration" icon="settings" href="/guides/configuration">
-    Customize update behavior and settings
   </Card>
 </CardGroup> 

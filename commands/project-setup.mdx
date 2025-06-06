@@ -7,17 +7,11 @@ description: 'Initialize Bugster in your project with bugster init'
   Make sure you have [authenticated](/authentication) with Bugster before setting up a project.
 </Note>
 
-## Overview
-
-The `bugster init` command sets up the necessary configuration files and directory structure for using Bugster in your project. This is typically the second step after authentication.
-
 ## Command Usage
 
 ### `bugster init`
 
-<Card title="Initialize Bugster Configuration" icon="gear">
-  Set up the necessary configuration files and directory structure for using Bugster in your project.
-</Card>
+Set up the necessary configuration files and directory structure for using Bugster in your project.
 
 ```bash
 bugster init
@@ -26,47 +20,31 @@ bugster init
 **What it does:**
 - Creates `.bugster` directory in your project root
 - Sets up configuration files (`config.json`)
-- Initializes project-specific settings
 - Prepares your project for test generation and execution
-- Creates initial directory structure for tests and cache
 
-## Step-by-Step Setup
+## Setup Steps
 
 <Steps>
   <Step title="Navigate to your project">
-    Open your terminal and navigate to your project directory:
     ```bash
     cd your-project-directory
     ```
   </Step>
   
   <Step title="Run init command">
-    Initialize Bugster in your project:
     ```bash
     bugster init
     ```
   </Step>
   
   <Step title="Configure base URL">
-    You'll be prompted to enter your application's base URL (e.g., `http://localhost:3000`).
-    
-    <Tip>
-      This should be the URL where your application runs during development or testing.
-    </Tip>
-  </Step>
-  
-  <Step title="Setup credentials (optional)">
-    The command may ask if you want to add authentication credentials for your application (username, password, etc.).
-  </Step>
-  
-  <Step title="Verify setup">
-    Check that the `.bugster` directory was created with the proper structure.
+    Enter your application's URL (e.g., `http://localhost:3000`) when prompted.
   </Step>
 </Steps>
 
-## Generated Directory Structure
+## Generated Structure
 
-After running `bugster init`, you'll see this structure in your project:
+After running `bugster init`, you'll see:
 
 ```
 your-project/
@@ -76,7 +54,7 @@ your-project/
     └── cache/              # Analysis cache files (created later)
 ```
 
-## Configuration File
+## Configuration
 
 The `config.json` file contains your project settings:
 
@@ -86,145 +64,13 @@ The `config.json` file contains your project settings:
   "credentials": {
     "username": "admin",
     "password": "password"
-  },
-  "project_settings": {
-    "test_timeout": 30000,
-    "browser_type": "chromium"
   }
 }
 ```
 
-## Configuration Options
-
-<AccordionGroup>
-  <Accordion icon="globe" title="Base URL">
-    **Purpose:** The default URL where your application runs
-    
-    **Examples:**
-    - `http://localhost:3000` (local development)
-    - `https://staging.yourapp.com` (staging environment)
-    - `https://yourapp.com` (production)
-    
-    **Note:** You can override this per test run using `--base-url`
-  </Accordion>
-
-  <Accordion icon="lock" title="Credentials">
-    **Purpose:** Authentication details for accessing your application
-    
-    **Options:**
-    - Username/password for basic auth
-    - API tokens for token-based auth
-    - Custom authentication headers
-    
-    **Security:** Credentials are stored locally and never shared
-  </Accordion>
-
-  <Accordion icon="settings" title="Project Settings">
-    **Available options:**
-    - `test_timeout`: Maximum time for test execution (milliseconds)
-    - `browser_type`: Browser to use (chromium, firefox, webkit)
-    - `headless`: Whether to run tests in headless mode by default
-    - `viewport`: Default viewport size for tests
-  </Accordion>
-</AccordionGroup>
-
-## Updating Configuration
-
-You can modify your configuration in several ways:
-
-### Re-run Init
-```bash
-# Re-run init to update settings interactively
-bugster init
-```
-
-### Manual Editing
-```bash
-# Edit the config file directly
-nano .bugster/config.json
-```
-
-### Command-line Override
-```bash
-# Override settings for a specific test run
-bugster run --base-url https://staging.example.com
-```
-
-## Multiple Environments
-
-You can set up different configurations for different environments:
-
-<CodeGroup>
-```bash Development
-# Initialize for local development
-bugster init
-# Enter: http://localhost:3000
-```
-
-```bash Staging
-# Update config for staging
-bugster init
-# Enter: https://staging.yourapp.com
-```
-
-```bash Production
-# Or override for production testing
-bugster run --base-url https://yourapp.com
-```
-</CodeGroup>
-
-## Troubleshooting
-
-<AccordionGroup>
-  <Accordion icon="folder" title="Permission Issues">
-    **Problem:** Can't create `.bugster` directory
-    
-    **Solutions:**
-    - Check you have write permissions in the current directory
-    - Run from your project root directory
-    - Ensure the directory isn't read-only
-  </Accordion>
-
-  <Accordion icon="file-x" title="Configuration Corruption">
-    **Problem:** Invalid or corrupted config.json
-    
-    **Solutions:**
-    - Delete `.bugster/config.json` and run `bugster init` again
-    - Check JSON syntax if editing manually
-    - Restore from backup if available
-  </Accordion>
-
-  <Accordion icon="refresh" title="Reset Configuration">
-    **Problem:** Need to completely reset setup
-    
-    **Solution:**
-    ```bash
-    # Remove the entire .bugster directory
-    rm -rf .bugster
-    
-    # Initialize fresh
-    bugster init
-    ```
-  </Accordion>
-</AccordionGroup>
-
-## Best Practices
-
-<Card title="Version Control" icon="git-branch">
-  **Add to .gitignore:** Consider adding `.bugster/cache/` to your `.gitignore` file, but keep `.bugster/config.json` and `.bugster/tests/` in version control for team sharing.
-</Card>
-
-<Card title="Environment Variables" icon="variable">
-  **Sensitive Data:** For sensitive configuration like API keys, consider using environment variables instead of storing them in config.json.
-</Card>
-
-<Card title="Team Setup" icon="users">
-  **Consistent URLs:** Use relative URLs or environment-specific configuration to ensure consistent setup across team members.
-</Card>
+You can edit this file directly or run `bugster init` again to update settings.
 
 ## Next Steps
-
-After setting up your project:
 
 <CardGroup cols={2}>
   <Card title="Generate Tests" icon="magic" href="/commands/test-generation">
@@ -233,13 +79,5 @@ After setting up your project:
   
   <Card title="Follow Quickstart" icon="rocket" href="/quickstart">
     Complete the full getting started workflow
-  </Card>
-  
-  <Card title="Configuration Guide" icon="settings" href="/guides/configuration">
-    Learn about advanced configuration options
-  </Card>
-  
-  <Card title="Run Tests" icon="play" href="/commands/test-execution">
-    Execute your generated tests
   </Card>
 </CardGroup> 

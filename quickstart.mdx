@@ -9,222 +9,129 @@ description: 'Get started with Bugster CLI in under 5 minutes'
 
 ## Quick Setup
 
-Get up and running with Bugster CLI in just a few commands. This guide will walk you through creating your first automated test suite.
+Get up and running with Bugster CLI in just a few commands.
 
 ### 1. Authenticate with Bugster
 
-<AccordionGroup>
-  <Accordion icon="key" title="Set up your API key">
-    First, you need to connect your CLI to your Bugster account:
-    
-    ```bash
-    bugster auth
-    ```
-    
-    You'll be prompted to enter your Bugster API key. You can find this in your [Bugster dashboard](https://dashboard.bugster.dev) under Account Settings.
-    
-    <Tip>
-      Don't have a Bugster account yet? [Sign up here](https://bugster.dev/signup) to get started.
-    </Tip>
-  </Accordion>
-</AccordionGroup>
+```bash
+bugster auth
+```
+
+Enter your API key when prompted. Find it in your [Bugster dashboard](https://dashboard.bugster.dev) under Account Settings.
 
 ### 2. Initialize Your Project
 
-<AccordionGroup>
-  <Accordion icon="gear" title="Set up project configuration">
-    Navigate to your project directory and initialize Bugster:
-    
-    ```bash
-    cd your-project-directory
-    bugster init
-    ```
-    
-    This will:
-    - Create a `.bugster` directory in your project
-    - Set up configuration files
-    - Prepare your project for test generation
-    
-    <Info>
-      The init command will prompt you for your application's base URL (e.g., `http://localhost:3000`).
-    </Info>
-  </Accordion>
-</AccordionGroup>
+```bash
+cd your-project-directory
+bugster init
+```
+
+This creates a `.bugster` directory and prompts you for your application's base URL (e.g., `http://localhost:3000`).
 
 ### 3. Generate Your First Tests
 
-<AccordionGroup>
-  <Accordion icon="magnifying-glass" title="Analyze your codebase">
-    Let Bugster analyze your code and automatically generate test specifications:
-    
-    ```bash
-    bugster generate
-    ```
-    
-    This intelligent analysis will:
-    - Scan your codebase to understand its structure
-    - Identify key user flows and features
-    - Generate comprehensive test specifications
-    - Save tests in the `.bugster/tests` directory
-    
-    <Tip>
-      Use `bugster generate --show-logs` to see detailed information about what Bugster is discovering in your code.
-    </Tip>
-  </Accordion>
-</AccordionGroup>
+```bash
+bugster generate
+```
+
+Bugster analyzes your codebase and creates test specifications in the `.bugster/tests` directory.
+
+<Tip>
+  Use `bugster generate --show-logs` to see what Bugster discovers in your code.
+</Tip>
 
 ### 4. Run Your Tests
 
-<AccordionGroup>
-  <Accordion icon="play" title="Execute your automated tests">
-    Now run the generated tests:
-    
-    ```bash
-    bugster run
-    ```
-    
-    For your first run, you might want to see the browser in action:
-    ```bash
-    bugster run --stream-results
-    ```
-    
-    <Note>
-      Make sure your application is running on the base URL you specified during init (e.g., `http://localhost:3000`).
-    </Note>
-  </Accordion>
-</AccordionGroup>
-
----
-
-## Next Steps
-
-<CardGroup>
-  <Card title="Customize Your Tests" icon="wrench" href="/cli-usage-reference#test-maintenance">
-    Learn how to update and maintain your test suite as your code evolves.
-  </Card>
-  
-  <Card title="Team Collaboration" icon="users" href="/cli-usage-reference#remote-synchronization">
-    Set up test synchronization for your development team.
-  </Card>
-  
-  <Card title="CI/CD Integration" icon="gear" href="/essentials/ci-cd">
-    Integrate Bugster tests into your continuous integration pipeline.
-  </Card>
-  
-  <Card title="Advanced Options" icon="settings" href="/cli-usage-reference#test-execution">
-    Explore advanced test execution options and configurations.
-  </Card>
-</CardGroup>
-
----
-
-## Common First-Time Scenarios
-
-<AccordionGroup>
-  <Accordion icon="desktop" title="Testing a Local Development Server">
-    If you're testing a local development server:
-    
-    ```bash
-    # Start your development server first
-    npm run dev  # or your equivalent command
-    
-    # In another terminal, run tests
-    bugster run --base-url http://localhost:3000
-    ```
-  </Accordion>
-
-  <Accordion icon="cloud" title="Testing a Staging Environment">
-    To test against a staging or production environment:
-    
-    ```bash
-    bugster run --base-url https://staging.yourapp.com
-    ```
-    
-    You can also update your base configuration:
-    ```bash
-    # Re-run init to update the base URL
-    bugster init
-    ```
-  </Accordion>
-
-  <Accordion icon="bug" title="Debugging Test Failures">
-    If tests fail on first run:
-    
-    ```bash
-    # Run with detailed output
-    bugster run --show-logs --stream-results
-    
-    # Run without headless mode to see what's happening
-    bugster run
-    
-    # Test a specific file
-    bugster run .bugster/tests/specific_test.yml
-    ```
-  </Accordion>
-
-  <Accordion icon="refresh" title="Updating Tests After Code Changes">
-    When you make changes to your application:
-    
-    ```bash
-    # Update existing tests to match code changes
-    bugster update
-    
-    # Run tests to verify they still pass
-    bugster run
-    ```
-  </Accordion>
-</AccordionGroup>
-
----
-
-## Example Workflow
-
-Here's a typical development workflow with Bugster CLI:
-
 ```bash
-# 1. Start with authentication (one-time setup)
-bugster auth
-
-# 2. Initialize new project (one-time per project)
-bugster init
-
-# 3. Generate initial test suite
-bugster generate
-
-# 4. Run tests to establish baseline
 bugster run
+```
 
-# 5. Make code changes
-# ... your development work ...
+For your first run, try:
+```bash
+bugster run --stream-results
+```
 
-# 6. Update tests for new changes
+<Note>
+  Make sure your application is running on the base URL you specified (e.g., `http://localhost:3000`).
+</Note>
+
+---
+
+## Common Scenarios
+
+**Testing a Local Development Server:**
+```bash
+# Start your dev server first
+npm run dev
+
+# In another terminal
+bugster run --base-url http://localhost:3000
+```
+
+**Testing a Staging Environment:**
+```bash
+bugster run --base-url https://staging.yourapp.com
+```
+
+**Debugging Test Failures:**
+```bash
+# Run with detailed output
+bugster run --show-logs --stream-results
+
+# Run without headless mode to see what's happening
+bugster run
+```
+
+**Updating Tests After Code Changes:**
+```bash
+# Update tests for code changes
 bugster update
 
-# 7. Run updated tests
+# Run updated tests
+bugster run
+```
+
+---
+
+## Typical Workflow
+
+```bash
+# 1. One-time setup
+bugster auth
+bugster init
+
+# 2. Generate initial tests
+bugster generate
+
+# 3. Run tests
 bugster run
 
-# 8. Share with team (if using team features)
+# 4. After making code changes
+bugster update
+bugster run
+
+# 5. Share with team (optional)
 bugster sync
 ```
 
 ---
 
-## Need Help?
+## Next Steps
 
-<CardGroup>
-  <Card title="Full CLI Reference" icon="book" href="/cli-usage-reference">
-    Complete documentation of all commands and options
+<CardGroup cols={2}>
+  <Card title="Test Maintenance" icon="wrench" href="/commands/test-maintenance">
+    Learn how to update tests as your code evolves
   </Card>
   
-  <Card title="Installation Issues" icon="download" href="/installation">
-    Troubleshoot installation problems
+  <Card title="Team Collaboration" icon="users" href="/commands/team-collaboration">
+    Set up test synchronization for your team
   </Card>
   
-  <Card title="Community Support" icon="comments" href="https://discord.gg/bugster">
-    Join our Discord community for help and discussions
+  <Card title="CLI Reference" icon="book" href="/cli-usage-reference">
+    Complete documentation of all commands
   </Card>
   
-  <Card title="Contact Support" icon="envelope" href="mailto:support@bugster.dev">
-    Email us directly for technical support
+  <Card title="GitHub Integration" icon="github" href="/integrations/github">
+    Automatically run tests on deployments
   </Card>
 </CardGroup>

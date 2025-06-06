@@ -7,152 +7,45 @@ description: 'Share and synchronize tests with your team using bugster sync'
   Team collaboration requires [authentication](/authentication) and generated tests to share.
 </Note>
 
-## Overview
-
-The `bugster sync` command enables seamless collaboration by synchronizing your local test specifications with the remote Bugster platform. Share tests with your team, maintain versioning, and ensure everyone has access to the latest test suite.
-
 ## Command Usage
 
 ### `bugster sync`
 
-<Card title="Sync with Remote Platform" icon="cloud-arrow-up">
-  Synchronize your local test specifications with the remote Bugster platform for team collaboration.
-</Card>
+Synchronize your local test specifications with the remote Bugster platform for team collaboration.
 
 ```bash
 bugster sync [OPTIONS]
 ```
 
-## Sync Operations
+**Options:**
+- `--pull` - Download test specifications from remote without uploading local changes
+- `--push` - Upload local test specifications to remote without downloading changes
+- `--branch BRANCH` - Synchronize with a specific branch instead of the default
+- `--clean-remote` - Delete remote test specifications that don't exist locally
+- `--dry-run` - Preview sync operations without making actual changes
+- `--prefer CHOICE` - Prefer 'local' or 'remote' when resolving conflicts
 
-<AccordionGroup>
-  <Accordion icon="download" title="Pull (Download)">
-    **Option:** `--pull`
-    
-    Download test specifications from remote without uploading local changes.
-    
-    ```bash
-    bugster sync --pull
-    ```
-    
-    **Use when:** Getting latest team updates or setting up on a new machine.
-  </Accordion>
+## Examples
 
-  <Accordion icon="upload" title="Push (Upload)">
-    **Option:** `--push`
-    
-    Upload local test specifications to remote without downloading changes.
-    
-    ```bash
-    bugster sync --push
-    ```
-    
-    **Use when:** Sharing your local test updates with the team.
-  </Accordion>
-
-  <Accordion icon="git-branch" title="Branch Specific">
-    **Option:** `--branch BRANCH`
-    
-    Synchronize with a specific branch instead of the default.
-    
-    ```bash
-    bugster sync --branch feature/new-ui
-    ```
-    
-    **Use when:** Working on feature branches with isolated test changes.
-  </Accordion>
-
-  <Accordion icon="trash" title="Clean Remote">
-    **Option:** `--clean-remote`
-    
-    Delete remote test specifications that don't exist locally.
-    
-    ```bash
-    bugster sync --clean-remote
-    ```
-    
-    **Use when:** Removing obsolete tests from the shared repository.
-  </Accordion>
-
-  <Accordion icon="eye" title="Dry Run">
-    **Option:** `--dry-run`
-    
-    Preview sync operations without making actual changes.
-    
-    ```bash
-    bugster sync --dry-run
-    ```
-    
-    **Use when:** Checking what changes would be made before applying them.
-  </Accordion>
-</AccordionGroup>
-
-## Branch-Based Collaboration
-
-Bugster sync supports branch-based workflows similar to Git:
-
-### Default Branch Sync
 ```bash
-# Sync with main/master branch
+# Full bidirectional sync
 bugster sync
 
-# Explicitly specify main branch
-bugster sync --branch main
+# Sync with specific branch
+bugster sync --branch feature/new-ui
+
+# Only download specs from remote
+bugster sync --pull
+
+# Preview upload without making changes
+bugster sync --push --dry-run
+
+# Resolve conflicts preferring local versions
+bugster sync --prefer local
+
+# Clean up remote specs not present locally
+bugster sync --clean-remote
 ```
-
-### Feature Branch Sync
-```bash
-# Sync with feature branch
-bugster sync --branch feature/payment-flow
-
-# Auto-detect current git branch
-bugster sync --auto-branch
-```
-
-### Branch Creation
-```bash
-# Create new branch on remote
-bugster sync --branch new-feature --create
-
-# Push to new branch
-bugster sync --push --branch new-feature
-```
-
-## Conflict Resolution
-
-When local and remote tests conflict, Bugster provides resolution options:
-
-<AccordionGroup>
-  <Accordion icon="arrow-left" title="Prefer Local">
-    **Option:** `--prefer local`
-    
-    Use local versions when conflicts occur.
-    
-    ```bash
-    bugster sync --prefer local
-    ```
-  </Accordion>
-
-  <Accordion icon="arrow-right" title="Prefer Remote">
-    **Option:** `--prefer remote`
-    
-    Use remote versions when conflicts occur.
-    
-    ```bash
-    bugster sync --prefer remote
-    ```
-  </Accordion>
-
-  <Accordion icon="users" title="Interactive Resolution">
-    **Option:** `--interactive`
-    
-    Manually resolve conflicts with interactive prompts.
-    
-    ```bash
-    bugster sync --interactive
-    ```
-  </Accordion>
-</AccordionGroup>
 
 ## Team Workflows
 
@@ -205,269 +98,20 @@ bugster run
 bugster sync --push --branch feature/user-dashboard
 ```
 
-## Sync Status and History
+## Common Issues
 
-### Check Sync Status
-```bash
-# View current sync status
-bugster sync --status
+**Sync Failures:**
+- Check your internet connection
+- Verify authentication: `bugster auth`
+- Try again after a few minutes
 
-# Show last sync information
-bugster sync --info
-```
-
-### Sync History
-```bash
-# View sync history
-bugster sync --history
-
-# Show detailed sync log
-bugster sync --log --verbose
-```
-
-## Team Management
-
-### Access Control
-- **Team Admin**: Full access to all branches and sync operations
-- **Developer**: Read/write access to assigned branches
-- **Viewer**: Read-only access to test specifications
-
-### Permissions
-```bash
-# Check your permissions
-bugster sync --permissions
-
-# View team member access
-bugster sync --team-info
-```
-
-## Advanced Sync Options
-
-### Selective Sync
-```bash
-# Sync specific test directories
-bugster sync --path .bugster/tests/smoke_tests/
-
-# Sync specific test types
-bugster sync --include "*.integration.yml"
-
-# Exclude certain patterns
-bugster sync --exclude "*legacy*"
-```
-
-### Merge Strategies
-```bash
-# Merge strategy for conflicts
-bugster sync --strategy merge
-
-# Overwrite strategy
-bugster sync --strategy overwrite
-
-# Safe merge (no destructive changes)
-bugster sync --strategy safe
-```
-
-## Integration Patterns
-
-### CI/CD Integration
-```yaml
-# GitHub Actions example
-name: Sync Bugster Tests
-on:
-  push:
-    branches: [main]
-    
-jobs:
-  sync-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      
-      - name: Setup Bugster
-        run: |
-          bugster auth --token ${{ secrets.BUGSTER_TOKEN }}
-          
-      - name: Sync Tests
-        run: |
-          bugster sync --push --branch main
-```
-
-### Git Hooks Integration
-```bash
-# .git/hooks/post-commit
-#!/bin/sh
-# Auto-sync tests after commits
-bugster sync --push --auto-branch
-
-# .git/hooks/post-merge
-#!/bin/sh
-# Pull latest tests after merges
-bugster sync --pull
-```
-
-### IDE Integration
-```json
-// VS Code tasks.json
-{
-  "label": "Sync Bugster Tests",
-  "type": "shell",
-  "command": "bugster sync",
-  "group": "test",
-  "presentation": {
-    "echo": true,
-    "reveal": "always"
-  }
-}
-```
-
-## Backup and Recovery
-
-### Automatic Backups
-```bash
-# Enable automatic backups
-bugster sync --backup-enabled
-
-# Set backup frequency
-bugster sync --backup-frequency daily
-```
-
-### Manual Backup
-```bash
-# Create manual backup
-bugster sync --backup create backup-2024-01-15
-
-# List available backups
-bugster sync --backup list
-
-# Restore from backup
-bugster sync --backup restore backup-2024-01-15
-```
-
-## Troubleshooting
-
-<AccordionGroup>
-  <Accordion icon="wifi" title="Sync Failures">
-    **Causes:**
-    - Network connectivity issues
-    - Authentication problems
-    - Server maintenance
-    
-    **Solutions:**
-    - Check internet connection
-    - Verify authentication: `bugster auth --status`
-    - Try again after a few minutes
-    - Use `--dry-run` to test connectivity
-  </Accordion>
-
-  <Accordion icon="merge" title="Merge Conflicts">
-    **Causes:**
-    - Simultaneous changes to same tests
-    - Different team members modifying same features
-    - Outdated local tests
-    
-    **Solutions:**
-    - Use `--interactive` for manual resolution
-    - Pull latest changes first: `bugster sync --pull`
-    - Use `--prefer` options for automatic resolution
-  </Accordion>
-
-  <Accordion icon="clock" title="Sync Taking Too Long">
-    **Causes:**
-    - Large test suite size
-    - Slow network connection
-    - Heavy server load
-    
-    **Solutions:**
-    - Use selective sync with `--path`
-    - Sync during off-peak hours
-    - Contact support for server status
-  </Accordion>
-
-  <Accordion icon="lock" title="Permission Denied">
-    **Causes:**
-    - Insufficient access rights
-    - Branch protection rules
-    - Account limitations
-    
-    **Solutions:**
-    - Check permissions: `bugster sync --permissions`
-    - Contact team admin for access
-    - Verify correct branch name
-  </Accordion>
-</AccordionGroup>
-
-## Security and Privacy
-
-<Card title="Data Security" icon="shield">
-  All test synchronization is encrypted in transit and at rest. Test specifications are only accessible to authenticated team members with appropriate permissions.
-</Card>
-
-**Security Features:**
-- End-to-end encryption for all sync operations
-- Role-based access control
-- Audit logs for all sync activities
-- Secure credential storage
-
-## Best Practices
-
-<Card title="Regular Syncing" icon="refresh">
-  **Frequency:** Sync regularly, especially before starting work (`--pull`) and after completing features (`--push`).
-</Card>
-
-<Card title="Branch Strategy" icon="git-branch">
-  **Organization:** Use branch-based workflows to isolate feature-specific tests and avoid conflicts.
-</Card>
-
-<Card title="Conflict Prevention" icon="users">
-  **Communication:** Coordinate with team members when working on overlapping features to minimize conflicts.
-</Card>
-
-<Card title="Backup Strategy" icon="shield-check">
-  **Protection:** Enable automatic backups and create manual backups before major changes.
-</Card>
-
-## Team Setup Guide
-
-### For Team Leads
-1. **Initial Setup**
-   ```bash
-   bugster auth
-   bugster init
-   bugster generate
-   bugster sync --push --branch main
-   ```
-
-2. **Invite Team Members**
-   - Share project access through Bugster dashboard
-   - Provide onboarding documentation
-   - Set up branch permissions
-
-### For Team Members
-1. **Join Project**
-   ```bash
-   bugster auth
-   bugster init
-   bugster sync --pull --branch main
-   ```
-
-2. **Daily Workflow**
-   ```bash
-   bugster sync --pull    # Start of day
-   # Development work
-   bugster sync --push    # End of day
-   ```
+**Merge Conflicts:**
+- Pull latest changes first: `bugster sync --pull`
+- Use `--prefer local` or `--prefer remote` for automatic resolution
 
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Workflows Guide" icon="workflow" href="/guides/workflows">
-    Learn comprehensive team workflow patterns
-  </Card>
-  
-  <Card title="Configuration" icon="settings" href="/guides/configuration">
-    Set up advanced sync and collaboration settings
-  </Card>
-  
   <Card title="Run Tests" icon="play" href="/commands/test-execution">
     Execute your synchronized test suite
   </Card>
