@@ -85,16 +85,14 @@ jobs:
 **Key points:**
 - The `environment` section is required
 - Tests run against the `url` specified in the environment
-- If no URL is provided, tests use the `base_url` from `.bugster/config.json`
+- If no URL is provided, tests use the `base_url` from `.bugster/config.yaml`
 
 ## Configuration
 
-Ensure your `.bugster/config.json` has the correct base URL as fallback:
+Ensure your `.bugster/config.yaml` has the correct base URL as fallback:
 
-```json
-{
-  "base_url": "https://your-app.com"
-}
+```yaml
+base_url: "https://your-app.com"
 ```
 
 ## Supported Platforms
@@ -134,7 +132,7 @@ Results appear as:
 
   <Accordion icon="settings" title="Missing environment URL">
     **Result:**
-    Tests will run against the `base_url` in your `.bugster/config.json` instead of the deployment URL.
+    Tests will run against the `base_url` in your `.bugster/config.yaml` instead of the deployment URL.
   </Accordion>
 </AccordionGroup>
 

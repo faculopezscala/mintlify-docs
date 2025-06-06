@@ -56,7 +56,7 @@ bugster init
 
 **What it does:**
 - Creates `.bugster` directory in your project root
-- Sets up configuration files (`config.json`)
+- Sets up configuration files (`config.yaml`)
 - Initializes project-specific settings
 - Prepares your project for test generation and execution
 - Creates initial directory structure for tests and cache
@@ -64,7 +64,7 @@ bugster init
 **Example output structure:**
 ```
 .bugster/
-├── config.json      # Project configuration
+├── config.yaml      # Project configuration
 ├── tests/          # Generated test specifications
 └── cache/          # Analysis cache files
 ```
@@ -172,7 +172,7 @@ bugster run integration_tests/ --run-id "release-v1.2.3"
 ```
 
 **What happens during execution:**
-- Loads configuration from `.bugster/config.json`
+- Loads configuration from `.bugster/config.yaml`
 - Finds and loads test files (YAML/JSON format)
 - For each test case, the Bugster Agent:
   - Opens a browser and performs test steps
@@ -355,7 +355,7 @@ bugster sync --clean-remote
 ### Directory Structure
 ```
 .bugster/
-├── config.json          # Project configuration
+├── config.yaml          # Project configuration
 │   ├── base_url         # Application URL
 │   ├── credentials      # Authentication data
 │   └── project_settings # Project-specific options
@@ -370,7 +370,7 @@ bugster sync --clean-remote
 
 ### Configuration Options
 
-The `config.json` file contains:
+The `config.yaml` file contains:
 - **base_url**: Default URL for running tests
 - **credentials**: Authentication information
 - **project_settings**: Custom project configurations
@@ -388,7 +388,7 @@ The `config.json` file contains:
     - Check network connectivity to Bugster servers
 
     **Configuration Issues:**
-    - Check `.bugster/config.json` for syntax errors
+    - Check `.bugster/config.yaml` for syntax errors
     - Reinitialize if corrupted: `bugster init`
 
     **Test Execution Failures:**
