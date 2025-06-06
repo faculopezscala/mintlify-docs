@@ -1,56 +1,112 @@
-Once installed, you can use Bugster CLI by running:
+---
+title: 'CLI Usage Reference'
+description: 'Complete reference guide for all Bugster CLI commands and options'
+---
 
-```bash
-bugster --help
-```
+<Note>
+  For help with any command, use `bugster [command] --help` to see detailed options and usage information.
+</Note>
 
-This command will display all available top-level commands, global options, and a list of subcommands
+## Global Options
 
-<Tip>You can also get help for specific subcommands (e.g., `bugster test --help`) to see options for that particular command. E.g., `bugster test --help`.</Tip>
+The following options are available for all Bugster CLI commands:
+
+- `--version, -v` - Print the version and exit
+- `--help, -h` - Show help message
 
 ## Commands Overview
 
-The Bugster CLI provides commands to initialize your configuration and run tests. Here are the main commands:
+The Bugster CLI provides a comprehensive set of commands for authentication, project setup, test generation, execution, and synchronization. Here are all available commands:
+
+## Authentication
+
+### `bugster auth`
+
+<Card title="Authenticate with Bugster" icon="key">
+  Connect your CLI to your Bugster account by setting up your API key. This is the first command you should run.
+</Card>
+
+```bash
+bugster auth
+```
+
+**What it does:**
+- Prompts you to enter your Bugster API key
+- Validates the API key with Bugster servers  
+- Stores authentication credentials for future use
+- Sets up the connection between your local CLI and Bugster platform
+
+<Tip>
+  You must authenticate before using other Bugster CLI features that require API access.
+</Tip>
+
+---
+
+## Project Initialization
 
 ### `bugster init`
 
 <Card title="Initialize Bugster Configuration" icon="gear">
-  This command initializes the Bugster CLI configuration, setting up the necessary files and settings for you to start using Bugster.
+  Set up the necessary configuration files and directory structure for using Bugster in your project.
 </Card>
 
-Run the command:
 ```bash
 bugster init
 ```
 
-**Key Actions:**
+**What it does:**
+- Creates `.bugster` directory in your project root
+- Sets up configuration files (`config.json`)
+- Initializes project-specific settings
+- Prepares your project for test generation and execution
+- Creates initial directory structure for tests and cache
 
-*   Prompts for a "Base URL" (defaulting to `http://localhost:3000`).
-*   Asks if you want to add credentials (e.g., username and password) and guides you through the process. If no credentials are added, it sets up default admin credentials.
-*   Creates a `.bugster` directory in your current project.
-*   Saves your configuration (Base URL, credentials) into a `config.yml` file within the `.bugster` directory.
-*   Creates an example test file (e.g., `example_test.yml`) in a `.bugster/examples` directory to help you get started.
-*   Displays the location of the created configuration and example test files, along with a table of the configured credentials.
-
-### `bugster analyze`
-
-<Card title="Analyze Your Codebase" icon="magnifying-glass">
-  This command lets Bugster agent analyze your codebase, understand it, and create a suite of tests based on the analysis.
-</Card>
-
-Run the command:
-```bash
-bugster analyze
+**Example output structure:**
+```
+.bugster/
+├── config.json      # Project configuration
+├── tests/          # Generated test specifications
+└── cache/          # Analysis cache files
 ```
 
-**Key Actions:**
+---
 
-*   Scans your codebase to understand its structure and functionality
-*   Creates a suite of tests (currently 5 tests in v0) based on the analysis
-*   The tests are created in Bugster format (YAML) which the agent uses to perform flows and validate results
+## Test Generation & Analysis
 
-**Example test file created:**
+### `bugster generate`
 
+<Card title="Generate Tests from Codebase" icon="magnifying-glass">
+  Analyze your codebase to automatically generate comprehensive test specifications.
+</Card>
+
+```bash
+bugster generate [OPTIONS]
+```
+
+**Options:**
+- `--show-logs` - Show detailed logs during the analysis process
+- `--force, -f` - Force analysis even if codebase has already been analyzed (overrides cache)
+
+**What it does:**
+- Scans your codebase to understand application structure
+- Identifies testable components and functionality
+- Generates comprehensive test specifications using AI
+- Creates test files in the `.bugster/tests` directory
+- Uses intelligent code pattern recognition
+
+**Examples:**
+```bash
+# Basic test generation
+bugster generate
+
+# Generate tests with detailed logging
+bugster generate --show-logs
+
+# Force re-analysis of already analyzed codebase
+bugster generate --force
+```
+
+**Example generated test:**
 ```yaml
 - name: Checkout Process Test
   task: Verify that users can complete the checkout process
@@ -69,58 +125,340 @@ bugster analyze
     - Verify order confirmation page is displayed
 ```
 
-### `bugster test`
+---
 
-<Card title="Run Bugster Tests" icon="terminal">
-  This command is used to run your Bugster tests.
+## Test Execution
+
+### `bugster run`
+
+<Card title="Execute Bugster Tests" icon="terminal">
+  Run your Bugster tests with various execution modes and output options.
 </Card>
 
-Run the command (example with a specific test path):
 ```bash
-bugster test your_test_file.yml
+bugster run [PATH] [OPTIONS]
 ```
 
-**Arguments/Options:**
+**Arguments:**
+- `PATH` - Optional path to test file or directory (defaults to `.bugster/tests`)
 
-*   **`test_path`** (optional): Specify a particular test file or a directory containing test files. If not provided, it may look for tests in a default location (e.g., `.bugster/examples`).
-    *   Example: `bugster test tests/smoke_tests/`
-*   **`--headless`** (optional flag): Runs browser tests without opening a visible browser window.
-    *   Example: `bugster test --headless`
-*   **`--silent`** (optional flag): Suppresses some of the detailed output logging to the console.
-    *   Example: `bugster test --silent`
+**Options:**
+- `--headless` - Run tests in headless mode (for browser-based tests)
+- `--silent, -s` - Run in silent mode with less verbose output
+- `--stream-results` - Stream test results as they complete (real-time output)
+- `--output FILE` - Save test results to a JSON file
+- `--run-id ID` - Associate a specific run ID with the test execution
+- `--base-url URL` - Override the base URL for the test run
 
-**Key Actions During Execution:**
+**Examples:**
+```bash
+# Run all tests
+bugster run
 
-*   Loads the configuration previously set up using the `init` command.
-*   Finds and loads your test files (typically YAML or JSON).
-*   For each test case:
-    *   The Bugster Agent opens a browser and performs the test exactly as described in the test file
-    *   The agent executes each step in the test file in sequence
-    *   The agent validates the results based on the expected outcomes
-    *   Upon completion, the agent determines if the test passed or failed
-*   After all tests are run, displays a summary table of the results (Test Name, Result, Reason, Time taken) and the total time taken.
-*   If any test fails, the command exits with an error code. 
+# Run tests in headless mode
+bugster run --headless
+
+# Run specific test file silently
+bugster run tests/login.spec.js --silent
+
+# Run with real-time output and save results
+bugster run --stream-results --output results.json
+
+# Run tests against staging environment
+bugster run --base-url https://staging.example.com
+
+# Run specific test directory with custom run ID
+bugster run integration_tests/ --run-id "release-v1.2.3"
+```
+
+**What happens during execution:**
+- Loads configuration from `.bugster/config.json`
+- Finds and loads test files (YAML/JSON format)
+- For each test case, the Bugster Agent:
+  - Opens a browser and performs test steps
+  - Executes each step in sequence
+  - Validates results against expected outcomes
+  - Determines pass/fail status
+- Displays summary table with results (Test Name, Result, Reason, Time)
+- Exits with error code if any tests fail
+
+---
+
+## Test Maintenance
+
+### `bugster update`
+
+<Card title="Synchronize Test Changes" icon="refresh">
+  Update your test specifications based on the latest changes in your codebase.
+</Card>
+
+```bash
+bugster update [OPTIONS]
+```
+
+**Options:**
+- `--update-only` - Only update existing specs, skip suggestions and deletions
+- `--suggest-only` - Only suggest new specs, skip updates and deletions  
+- `--delete-only` - Only delete obsolete specs, skip updates and suggestions
+- `--show-logs` - Show detailed logs during the update process
+
+**What it does:**
+- Detects changes in your codebase since last analysis
+- Updates existing test specifications to match code changes
+- Suggests new tests for new functionality
+- Identifies and removes obsolete test specifications
+- Maintains test coverage as your code evolves
+
+**Examples:**
+```bash
+# Full update: modify, suggest, and delete specs
+bugster update
+
+# Only update existing test specifications
+bugster update --update-only
+
+# Only suggest new tests with logging
+bugster update --suggest-only --show-logs
+
+# Only remove obsolete specifications
+bugster update --delete-only
+```
+
+---
+
+## Remote Synchronization
+
+### `bugster sync`
+
+<Card title="Sync with Remote Platform" icon="cloud-arrow-up">
+  Synchronize your local test specifications with the remote Bugster platform for team collaboration.
+</Card>
+
+```bash
+bugster sync [OPTIONS]
+```
+
+**Options:**
+- `--branch BRANCH` - Specify branch to sync with (defaults to current git branch or 'main')
+- `--pull` - Only pull specs from remote (download only)
+- `--push` - Only push specs to remote (upload only)
+- `--clean-remote` - Delete remote specs that don't exist locally
+- `--dry-run` - Show what would happen without making actual changes
+- `--prefer CHOICE` - Prefer 'local' or 'remote' when resolving conflicts
+
+**What it does:**
+- Synchronizes test specifications between local and remote
+- Handles branch-specific test data
+- Resolves conflicts between local and remote versions
+- Enables team collaboration on test specifications
+- Provides backup and versioning for your test data
+
+**Examples:**
+```bash
+# Full bidirectional sync
+bugster sync
+
+# Sync with specific branch
+bugster sync --branch feature/new-ui
+
+# Only download specs from remote
+bugster sync --pull
+
+# Preview upload without making changes
+bugster sync --push --dry-run
+
+# Resolve conflicts preferring local versions
+bugster sync --prefer local
+
+# Clean up remote specs not present locally
+bugster sync --clean-remote
+```
+
+---
+
+## Common Workflows
+
+<AccordionGroup>
+  <Accordion icon="rocket" title="Getting Started">
+    ```bash
+    # 1. Authenticate with your API key (FIRST STEP)
+    bugster auth
+    
+    # 2. Initialize project
+    bugster init
+    
+    # 3. Generate initial test specs
+    bugster generate
+    
+    # 4. Run the generated tests
+    bugster run
+    ```
+  </Accordion>
+
+  <Accordion icon="code-commit" title="Development Cycle">
+    ```bash
+    # 1. Make code changes
+    # [Your development work]
+    
+    # 2. Update tests for code changes
+    bugster update
+    
+    # 3. Verify tests still pass
+    bugster run
+    
+    # 4. Sync with team/remote
+    bugster sync
+    ```
+  </Accordion>
+
+  <Accordion icon="users" title="Team Collaboration">
+    ```bash
+    # 1. Get latest team test specs
+    bugster sync --pull
+    
+    # 2. Work on features
+    # [Your development work]
+    
+    # 3. Update tests for your changes
+    bugster update
+    
+    # 4. Share your test updates
+    bugster sync --push
+    ```
+  </Accordion>
+
+  <Accordion icon="bug" title="Debugging Failed Tests">
+    ```bash
+    # 1. Run tests with detailed logging
+    bugster run --show-logs
+    
+    # 2. Run specific failing test
+    bugster run path/to/failing_test.yml --stream-results
+    
+    # 3. Check test in non-headless mode
+    bugster run path/to/failing_test.yml
+    
+    # 4. Save results for analysis
+    bugster run --output debug_results.json
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Configuration
+
+<Card title="Configuration Files" icon="file-code">
+  Bugster stores all configuration and test data in the `.bugster/` directory.
+</Card>
+
+### Directory Structure
+```
+.bugster/
+├── config.json          # Project configuration
+│   ├── base_url         # Application URL
+│   ├── credentials      # Authentication data
+│   └── project_settings # Project-specific options
+├── tests/               # Generated test specifications
+│   ├── smoke_tests/     # Smoke test suite
+│   ├── integration/     # Integration tests
+│   └── e2e/            # End-to-end tests
+└── cache/              # Analysis cache files
+    ├── codebase_hash   # Codebase state tracking
+    └── analysis_data   # Cached analysis results
+```
+
+### Configuration Options
+
+The `config.json` file contains:
+- **base_url**: Default URL for running tests
+- **credentials**: Authentication information
+- **project_settings**: Custom project configurations
+- **test_directories**: Custom test organization
+- **execution_preferences**: Default test execution settings
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion icon="exclamation-triangle" title="Common Issues">
+    **Authentication Problems:**
+    - Verify your API key is correct: `bugster auth`
+    - Check network connectivity to Bugster servers
+
+    **Configuration Issues:**
+    - Check `.bugster/config.json` for syntax errors
+    - Reinitialize if corrupted: `bugster init`
+
+    **Test Execution Failures:**
+    - Use `--show-logs` for detailed debugging information
+    - Verify base URL is accessible: `--base-url` option
+    - Check browser dependencies for headless mode
+  </Accordion>
+
+  <Accordion icon="gear" title="Debug Commands">
+    ```bash
+    # Get detailed logs during any operation
+    bugster [command] --show-logs
+    
+    # Preview sync changes without applying
+    bugster sync --dry-run
+    
+    # Force bypass cache issues
+    bugster generate --force
+    
+    # Run tests with full output
+    bugster run --stream-results
+    ```
+  </Accordion>
+
+  <Accordion icon="refresh" title="Reset and Recovery">
+    ```bash
+    # Reset authentication
+    bugster auth
+    
+    # Reinitialize project (preserves tests)
+    bugster init
+    
+    # Force regenerate all tests
+    bugster generate --force
+    
+    # Clean remote sync state
+    bugster sync --clean-remote --dry-run  # preview first
+    bugster sync --clean-remote           # then execute
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
 
 ## Dependencies
 
 <Info>
-  Bugster CLI relies on several Python packages. The primary dependencies are managed via `setup.py` and are also listed in `requirements.txt`.
+  Bugster CLI relies on several Python packages for optimal functionality.
 </Info>
 
-Key dependencies include:
-
-*   `click`
-*   `httpx`
-*   `pydantic`
-*   `rich`
-*   `typer`
+**Key Dependencies:**
+- `click` - Command-line interface framework
+- `httpx` - HTTP client for API communication
+- `pydantic` - Data validation and parsing
+- `rich` - Rich text and beautiful formatting
+- `typer` - Modern CLI framework
 
 <Tip>
-  For a full list of dependencies, please refer to the `requirements.txt` file or the `install_requires` section in `setup.py`.
+  All dependencies are automatically managed during installation. For a complete list, refer to the `requirements.txt` file in the project repository.
 </Tip>
+
+---
 
 ## Next Steps
 
-<Card title="Install Bugster CLI" icon="download" href="installation">
-  Get started by installing the CLI on your system.
-</Card> 
+<CardGroup cols={2}>
+  <Card title="Installation Guide" icon="download" href="/installation">
+    Install Bugster CLI on your system
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference">
+    Explore the API integration options
+  </Card>
+</CardGroup> 
