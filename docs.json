@@ -12,9 +12,9 @@
     "dark": "#5A5A5A",
     "light": "#5A5A5A"
   },
-  "modeToggle": {
+  "appearance": {
     "default": "dark",
-    "isHidden": true
+    "strict": true
   },
   "favicon": "/logo/logo2.jpeg",
   "navigation": {
