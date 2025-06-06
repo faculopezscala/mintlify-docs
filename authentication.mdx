@@ -1,0 +1,128 @@
+---
+title: 'Authentication'
+description: 'Connect your CLI to your Bugster account'
+---
+
+<Note>
+  Authentication is the **first step** you must complete before using any other Bugster CLI features.
+</Note>
+
+## Overview
+
+The `bugster auth` command connects your local CLI to your Bugster account by setting up your API key. This is a one-time setup process that enables all other CLI functionality.
+
+## Command Usage
+
+### `bugster auth`
+
+<Card title="Authenticate with Bugster" icon="key">
+  Connect your CLI to your Bugster account by setting up your API key.
+</Card>
+
+```bash
+bugster auth
+```
+
+**What it does:**
+- Prompts you to enter your Bugster API key
+- Validates the API key with Bugster servers  
+- Stores authentication credentials securely for future use
+- Sets up the connection between your local CLI and Bugster platform
+
+## Step-by-Step Authentication
+
+<Steps>
+  <Step title="Run the auth command">
+    Open your terminal and run:
+    ```bash
+    bugster auth
+    ```
+  </Step>
+  
+  <Step title="Get your API key">
+    You'll need your Bugster API key. Find it in your [Bugster dashboard](https://dashboard.bugster.dev) under Account Settings.
+    
+    <Tip>
+      Don't have a Bugster account yet? [Sign up here](https://bugster.dev/signup) to get started.
+    </Tip>
+  </Step>
+  
+  <Step title="Enter your API key">
+    When prompted, paste your API key and press Enter. The CLI will validate it automatically.
+  </Step>
+  
+  <Step title="Confirmation">
+    You'll see a success message confirming your authentication is complete.
+  </Step>
+</Steps>
+
+## Authentication Status
+
+To verify your authentication status at any time:
+
+```bash
+bugster auth --status
+```
+
+This will show whether you're currently authenticated and which account is connected.
+
+## Troubleshooting Authentication
+
+<AccordionGroup>
+  <Accordion icon="exclamation-triangle" title="Invalid API Key">
+    **Problem:** Getting "Invalid API key" error
+    
+    **Solutions:**
+    - Double-check your API key in the [Bugster dashboard](https://dashboard.bugster.dev)
+    - Make sure you're copying the entire key without extra spaces
+    - Try generating a new API key if the current one is old
+  </Accordion>
+
+  <Accordion icon="wifi" title="Network Connection Issues">
+    **Problem:** Can't connect to Bugster servers
+    
+    **Solutions:**
+    - Check your internet connection
+    - Verify firewall settings aren't blocking the connection
+    - Try again after a few minutes in case of temporary server issues
+  </Accordion>
+
+  <Accordion icon="refresh" title="Re-authenticating">
+    **Problem:** Need to switch accounts or refresh credentials
+    
+    **Solution:**
+    Simply run `bugster auth` again to overwrite your current authentication with new credentials.
+  </Accordion>
+</AccordionGroup>
+
+## Security Notes
+
+<Warning>
+  Your API key is stored securely on your local machine. Never share your API key with others or commit it to version control.
+</Warning>
+
+- API keys are stored in your system's secure credential storage
+- Keys are encrypted and only accessible by the Bugster CLI
+- You can regenerate your API key anytime in the Bugster dashboard
+
+## Next Steps
+
+Once authenticated, you're ready to:
+
+<CardGroup cols={2}>
+  <Card title="Initialize a Project" icon="gear" href="/commands/project-setup">
+    Set up Bugster in your codebase
+  </Card>
+  
+  <Card title="Generate Tests" icon="magic" href="/commands/test-generation">
+    Create your first automated tests
+  </Card>
+  
+  <Card title="Complete Quickstart" icon="rocket" href="/quickstart">
+    Follow the full getting started guide
+  </Card>
+  
+  <Card title="View All Commands" icon="list" href="/reference/command-reference">
+    Explore all available CLI commands
+  </Card>
+</CardGroup> 

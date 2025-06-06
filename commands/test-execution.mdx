@@ -1,0 +1,393 @@
+---
+title: 'Test Execution'
+description: 'Run your automated tests with bugster run'
+---
+
+<Note>
+  Make sure you have [generated tests](/commands/test-generation) before attempting to run them.
+</Note>
+
+## Overview
+
+The `bugster run` command executes your generated test specifications in real browsers, simulating actual user interactions to validate your application's behavior.
+
+## Command Usage
+
+### `bugster run`
+
+<Card title="Execute Bugster Tests" icon="play">
+  Run your automated tests with various execution modes and output options.
+</Card>
+
+```bash
+bugster run [PATH] [OPTIONS]
+```
+
+**Arguments:**
+- `PATH` - Optional path to test file or directory (defaults to `.bugster/tests`)
+
+## Basic Usage
+
+### Run All Tests
+```bash
+# Execute all tests in .bugster/tests
+bugster run
+```
+
+### Run Specific Tests
+```bash
+# Run a specific test file
+bugster run .bugster/tests/login.yml
+
+# Run all tests in a directory
+bugster run .bugster/tests/smoke_tests/
+
+# Run tests matching a pattern
+bugster run .bugster/tests/*checkout*
+```
+
+## Execution Options
+
+<AccordionGroup>
+  <Accordion icon="eye-slash" title="Headless Mode">
+    **Option:** `--headless`
+    
+    Run tests without opening visible browser windows. Ideal for CI/CD environments.
+    
+    ```bash
+    bugster run --headless
+    ```
+  </Accordion>
+
+  <Accordion icon="volume-off" title="Silent Mode">
+    **Option:** `--silent, -s`
+    
+    Reduce output verbosity for cleaner logs.
+    
+    ```bash
+    bugster run --silent
+    bugster run -s
+    ```
+  </Accordion>
+
+  <Accordion icon="stream" title="Stream Results">
+    **Option:** `--stream-results`
+    
+    Show test results in real-time as they complete.
+    
+    ```bash
+    bugster run --stream-results
+    ```
+  </Accordion>
+
+  <Accordion icon="globe" title="Base URL Override">
+    **Option:** `--base-url URL`
+    
+    Override the configured base URL for this test run.
+    
+    ```bash
+    bugster run --base-url https://staging.example.com
+    ```
+  </Accordion>
+
+  <Accordion icon="file-export" title="Output Results">
+    **Option:** `--output FILE`
+    
+    Save detailed test results to a JSON file.
+    
+    ```bash
+    bugster run --output results.json
+    ```
+  </Accordion>
+
+  <Accordion icon="tag" title="Run ID">
+    **Option:** `--run-id ID`
+    
+    Associate a specific identifier with this test run.
+    
+    ```bash
+    bugster run --run-id "release-v1.2.3"
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Execution Examples
+
+### Development Testing
+```bash
+# Quick test run during development
+bugster run --stream-results
+
+# Test specific feature after changes
+bugster run .bugster/tests/user_auth/ --silent
+```
+
+### Staging Validation
+```bash
+# Full test suite against staging
+bugster run --base-url https://staging.yourapp.com --output staging_results.json
+
+# Critical path tests only
+bugster run .bugster/tests/smoke_tests/ --base-url https://staging.yourapp.com
+```
+
+### CI/CD Pipeline
+```bash
+# Automated testing in CI
+bugster run --headless --silent --output ci_results.json --run-id "${BUILD_ID}"
+
+# Pre-deployment validation
+bugster run .bugster/tests/smoke_tests/ --headless --base-url https://preview.yourapp.com
+```
+
+## Test Execution Process
+
+<Steps>
+  <Step title="Configuration Loading">
+    Loads settings from `.bugster/config.json` and applies any command-line overrides.
+  </Step>
+  
+  <Step title="Test Discovery">
+    Finds and validates all test files in the specified path or default directory.
+  </Step>
+  
+  <Step title="Browser Initialization">
+    Launches browser instances (visible or headless) for test execution.
+  </Step>
+  
+  <Step title="Test Execution">
+    For each test:
+    - Opens the target URL
+    - Executes each step in sequence
+    - Validates expected outcomes
+    - Captures screenshots and logs
+  </Step>
+  
+  <Step title="Results Compilation">
+    Aggregates results and generates summary reports with pass/fail status.
+  </Step>
+</Steps>
+
+## Understanding Test Results
+
+### Console Output
+```bash
+✅ User Login Flow                    (2.3s)
+✅ Product Search                     (1.8s)
+❌ Checkout Process                   (4.1s) - Payment form validation failed
+✅ User Profile Update                (1.5s)
+
+Summary: 3 passed, 1 failed (9.7s total)
+```
+
+### Detailed Results (JSON)
+```json
+{
+  "run_id": "test-run-123",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "total_tests": 4,
+  "passed": 3,
+  "failed": 1,
+  "duration": 9700,
+  "tests": [
+    {
+      "name": "User Login Flow",
+      "status": "passed",
+      "duration": 2300,
+      "steps_completed": 5,
+      "screenshots": ["login_start.png", "login_success.png"]
+    }
+  ]
+}
+```
+
+## Browser and Environment Options
+
+### Browser Selection
+```bash
+# Specify browser type (if supported)
+bugster run --browser chromium
+bugster run --browser firefox
+bugster run --browser webkit
+```
+
+### Viewport and Device Emulation
+```bash
+# Mobile testing
+bugster run --viewport 375x667
+
+# Tablet testing  
+bugster run --viewport 768x1024
+
+# Desktop testing
+bugster run --viewport 1920x1080
+```
+
+### Environment Variables
+```bash
+# Set environment-specific variables
+TEST_ENV=staging bugster run
+API_KEY=test_key bugster run --base-url https://test.example.com
+```
+
+## Parallel Execution
+
+For large test suites, run tests in parallel:
+
+```bash
+# Run tests in parallel (if supported)
+bugster run --parallel 4
+
+# Distribute tests across multiple processes
+bugster run --workers 2
+```
+
+## Debugging Failed Tests
+
+### Verbose Output
+```bash
+# Get detailed execution logs
+bugster run --show-logs --stream-results
+
+# Run single test with full debugging
+bugster run .bugster/tests/failing_test.yml --show-logs
+```
+
+### Interactive Mode
+```bash
+# Run without headless mode to see browser
+bugster run .bugster/tests/failing_test.yml
+
+# Pause on failure for inspection
+bugster run --debug-on-failure
+```
+
+### Screenshot and Video Capture
+```bash
+# Capture screenshots on failure
+bugster run --screenshot-on-failure
+
+# Record video of test execution
+bugster run --record-video
+```
+
+## Performance Considerations
+
+<Card title="Optimization Tips" icon="speedometer">
+  - Use `--headless` for faster execution
+  - Run critical tests first with specific paths
+  - Use `--parallel` for large test suites
+  - Consider test timeout settings for slow environments
+</Card>
+
+### Timeout Configuration
+```bash
+# Set custom timeout for slow environments
+bugster run --timeout 60000
+
+# Per-test timeout override
+bugster run --step-timeout 5000
+```
+
+## Integration Patterns
+
+### CI/CD Integration
+```yaml
+# GitHub Actions example
+- name: Run Bugster Tests
+  run: |
+    bugster run --headless --output results.json
+    
+- name: Upload Results
+  uses: actions/upload-artifact@v2
+  with:
+    name: test-results
+    path: results.json
+```
+
+### Pre-commit Hooks
+```bash
+#!/bin/sh
+# .git/hooks/pre-commit
+bugster run .bugster/tests/smoke_tests/ --headless --silent
+```
+
+### Deployment Validation
+```bash
+# Post-deployment verification
+bugster run .bugster/tests/smoke_tests/ --base-url $DEPLOYED_URL --run-id $DEPLOYMENT_ID
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion icon="exclamation-triangle" title="Tests Fail on First Run">
+    **Common causes:**
+    - Application not running on expected URL
+    - Authentication or session issues
+    - Timing problems with dynamic content
+    
+    **Solutions:**
+    - Verify application is accessible at base URL
+    - Check authentication credentials in config
+    - Use `--show-logs` to see detailed failure reasons
+  </Accordion>
+
+  <Accordion icon="clock" title="Tests Taking Too Long">
+    **Causes:**
+    - Slow application response times
+    - Network latency issues
+    - Complex page loads
+    
+    **Solutions:**
+    - Increase timeout settings
+    - Use `--headless` for faster execution
+    - Run tests against local environment first
+  </Accordion>
+
+  <Accordion icon="browser" title="Browser Issues">
+    **Causes:**
+    - Browser not installed or outdated
+    - Permission issues
+    - Display problems in headless mode
+    
+    **Solutions:**
+    - Update browser dependencies
+    - Check system permissions
+    - Try different browser with `--browser` option
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<Card title="Test Environment" icon="server">
+  **Stable environment:** Run tests against consistent, stable environments. Avoid testing against environments with ongoing deployments.
+</Card>
+
+<Card title="Data Management" icon="database">
+  **Test data:** Use dedicated test data or reset mechanisms to ensure consistent test conditions.
+</Card>
+
+<Card title="Monitoring" icon="chart-line">
+  **Track results:** Use `--output` and `--run-id` to track test performance and reliability over time.
+</Card>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Test Maintenance" icon="wrench" href="/commands/test-maintenance">
+    Keep your tests updated with code changes
+  </Card>
+  
+  <Card title="Team Collaboration" icon="users" href="/commands/team-collaboration">
+    Share and sync tests with your team
+  </Card>
+  
+  <Card title="Workflows Guide" icon="workflow" href="/guides/workflows">
+    Learn development workflow integration
+  </Card>
+  
+  <Card title="Troubleshooting" icon="life-ring" href="/guides/troubleshooting">
+    Solve common execution problems
+  </Card>
+</CardGroup> 

@@ -1,0 +1,296 @@
+---
+title: 'Test Generation'
+description: 'Generate AI-powered tests from your codebase with bugster generate'
+---
+
+<Note>
+  Ensure you have [set up your project](/commands/project-setup) before generating tests.
+</Note>
+
+## Overview
+
+The `bugster generate` command analyzes your codebase using AI to automatically create comprehensive test specifications. It understands your application structure and generates relevant tests covering key user flows and functionality.
+
+## Command Usage
+
+### `bugster generate`
+
+<Card title="Generate Tests from Codebase" icon="magic">
+  Analyze your codebase to automatically generate comprehensive test specifications using AI.
+</Card>
+
+```bash
+bugster generate [OPTIONS]
+```
+
+**Options:**
+- `--show-logs` - Show detailed logs during the analysis process
+- `--force, -f` - Force analysis even if codebase has already been analyzed (overrides cache)
+
+## How It Works
+
+<Steps>
+  <Step title="Codebase Scanning">
+    Bugster scans your project files to understand the application structure, routes, components, and functionality.
+  </Step>
+  
+  <Step title="AI Analysis">
+    Advanced AI models analyze the code patterns to identify testable user flows, critical paths, and edge cases.
+  </Step>
+  
+  <Step title="Test Specification Creation">
+    Generates comprehensive test specifications in YAML format that describe user interactions and expected outcomes.
+  </Step>
+  
+  <Step title="File Organization">
+    Saves the generated tests in the `.bugster/tests` directory with logical grouping and naming.
+  </Step>
+</Steps>
+
+## Basic Usage
+
+### Generate Tests
+```bash
+# Basic test generation
+bugster generate
+```
+
+### Generate with Detailed Logging
+```bash
+# See what Bugster is analyzing
+bugster generate --show-logs
+```
+
+### Force Regeneration
+```bash
+# Force fresh analysis (bypasses cache)
+bugster generate --force
+```
+
+## Generated Test Structure
+
+Tests are created in YAML format with this structure:
+
+```yaml
+- name: User Registration Flow
+  task: Verify that new users can successfully create an account
+  expected_result: User should be registered and logged in
+  steps:
+    - Navigate to /signup page
+    - Fill in email field with "test@example.com"
+    - Fill in password field with "securePassword123"
+    - Fill in confirm password field with "securePassword123"
+    - Click "Create Account" button
+    - Verify welcome message is displayed
+    - Verify user is redirected to dashboard
+```
+
+## Types of Tests Generated
+
+<AccordionGroup>
+  <Accordion icon="user-plus" title="User Flows">
+    **Examples:**
+    - User registration and login
+    - Checkout and payment processes
+    - Profile management
+    - Password recovery
+    
+    **Focus:** End-to-end user journeys
+  </Accordion>
+
+  <Accordion icon="puzzle-piece" title="Feature Testing">
+    **Examples:**
+    - Form submissions
+    - Search functionality
+    - Filtering and sorting
+    - Navigation flows
+    
+    **Focus:** Individual feature validation
+  </Accordion>
+
+  <Accordion icon="shield-check" title="Edge Cases">
+    **Examples:**
+    - Error handling
+    - Invalid input scenarios
+    - Permission boundaries
+    - Rate limiting behavior
+    
+    **Focus:** Robustness and error scenarios
+  </Accordion>
+
+  <Accordion icon="devices" title="UI Interactions">
+    **Examples:**
+    - Button clicks and form interactions
+    - Modal dialogs and popups
+    - Dropdown selections
+    - File uploads
+    
+    **Focus:** User interface elements
+  </Accordion>
+</AccordionGroup>
+
+## Test Organization
+
+Generated tests are organized in the `.bugster/tests` directory:
+
+```
+.bugster/tests/
+├── smoke_tests/          # Critical path tests
+│   ├── login.yml
+│   └── core_features.yml
+├── integration/          # Feature integration tests
+│   ├── user_management.yml
+│   └── payment_flow.yml
+├── e2e/                 # End-to-end scenarios
+│   ├── complete_user_journey.yml
+│   └── admin_workflows.yml
+└── edge_cases/          # Error and boundary tests
+    ├── validation_errors.yml
+    └── permission_tests.yml
+```
+
+## Customizing Generation
+
+### Project Types
+Bugster automatically detects and optimizes for different project types:
+
+<CardGroup cols={2}>
+  <Card title="E-commerce" icon="shopping-cart">
+    Focuses on product browsing, cart management, checkout flows, and payment processing.
+  </Card>
+  
+  <Card title="SaaS Applications" icon="building">
+    Emphasizes user onboarding, feature usage, subscription management, and admin functions.
+  </Card>
+  
+  <Card title="Content Platforms" icon="newspaper">
+    Targets content creation, publishing workflows, search, and user engagement features.
+  </Card>
+  
+  <Card title="Admin Dashboards" icon="chart-bar">
+    Concentrates on data management, reporting, user administration, and configuration features.
+  </Card>
+</CardGroup>
+
+### Framework Detection
+Bugster recognizes and adapts to various frameworks:
+
+- **React/Vue/Angular**: Component-based testing
+- **Node.js/Express**: API endpoint testing
+- **Rails/Django**: MVC pattern testing
+- **WordPress**: CMS-specific flows
+
+## Advanced Options
+
+### Selective Generation
+```bash
+# Generate tests for specific directories
+bugster generate --path src/components/auth
+
+# Focus on specific file types
+bugster generate --include "*.jsx,*.vue"
+
+# Exclude certain directories
+bugster generate --exclude node_modules,dist
+```
+
+### Generation Modes
+```bash
+# Conservative mode (fewer, high-confidence tests)
+bugster generate --mode conservative
+
+# Comprehensive mode (more extensive coverage)
+bugster generate --mode comprehensive
+
+# Custom coverage target
+bugster generate --coverage 80
+```
+
+## Quality and Coverage
+
+<Card title="AI Quality Assurance" icon="robot">
+  Generated tests go through multiple AI validation layers to ensure relevance, accuracy, and comprehensive coverage of your application's key functionality.
+</Card>
+
+**What Bugster Analyzes:**
+- Component relationships and data flow
+- User interface patterns and interactions
+- Business logic and validation rules
+- Error handling and edge cases
+- Security and permission boundaries
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion icon="clock" title="Generation Taking Too Long">
+    **Causes:**
+    - Very large codebase
+    - Complex dependency graphs
+    - Network connectivity issues
+    
+    **Solutions:**
+    - Use `--path` to analyze specific directories
+    - Exclude large dependencies with `--exclude`
+    - Check internet connection for AI processing
+  </Accordion>
+
+  <Accordion icon="file-x" title="No Tests Generated">
+    **Causes:**
+    - No recognizable UI components found
+    - Unsupported framework or structure
+    - Configuration issues
+    
+    **Solutions:**
+    - Ensure you're in the correct project directory
+    - Check that your project has frontend components
+    - Run with `--show-logs` to see analysis details
+  </Accordion>
+
+  <Accordion icon="exclamation-triangle" title="Low Quality Tests">
+    **Causes:**
+    - Unusual code patterns
+    - Missing documentation or comments
+    - Complex custom frameworks
+    
+    **Solutions:**
+    - Add comments to critical code sections
+    - Use `--mode comprehensive` for deeper analysis
+    - Manually review and edit generated tests
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<Card title="Code Preparation" icon="code">
+  **Clean codebase:** Well-organized, commented code leads to better test generation. Consider adding JSDoc or similar documentation before generating tests.
+</Card>
+
+<Card title="Iterative Approach" icon="refresh">
+  **Start small:** Begin with core features, run tests, then expand. Use `--path` to focus on specific areas initially.
+</Card>
+
+<Card title="Review Generated Tests" icon="eye">
+  **Quality check:** Always review generated tests before running them in production. AI-generated tests are highly accurate but may need minor adjustments.
+</Card>
+
+## Next Steps
+
+After generating tests:
+
+<CardGroup cols={2}>
+  <Card title="Run Tests" icon="play" href="/commands/test-execution">
+    Execute your generated test suite
+  </Card>
+  
+  <Card title="Update Tests" icon="refresh" href="/commands/test-maintenance">
+    Keep tests synchronized with code changes
+  </Card>
+  
+  <Card title="Workflows Guide" icon="workflow" href="/guides/workflows">
+    Learn development workflow patterns
+  </Card>
+  
+  <Card title="Configuration" icon="settings" href="/guides/configuration">
+    Customize test generation settings
+  </Card>
+</CardGroup> 
