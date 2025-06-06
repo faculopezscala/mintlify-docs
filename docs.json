@@ -4,13 +4,17 @@
   "name": "Bugster",
   "logo": {
     "dark": "/logo/LOGOTYPE-VIOLET-LIGHT.png",
-    "light": "/logo/LOGOTYPE-VIOLET-DARK.png"
+    "light": "/logo/LOGOTYPE-VIOLET-LIGHT.png"
   },
   "description": "Bugster is an AI tester that simulates a real user in a real browser, providing insights directly in your PR. It's designed for developers at VC-backed startups who want to ship with confidence without writing or maintaining flaky test suites.",
   "colors": {
-    "primary": "#363D61",
-    "dark": "#363D61",
-    "light": "#C6CBEB"
+    "primary": "#5A5A5A",
+    "dark": "#5A5A5A",
+    "light": "#5A5A5A"
+  },
+  "modeToggle": {
+    "default": "dark",
+    "isHidden": true
   },
   "favicon": "/logo/logo2.jpeg",
   "navigation": {
