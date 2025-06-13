@@ -19,11 +19,35 @@ bugster init
 ```
 
 This command will:
-- Prompt for your API key. You can find it in your [Bugster dashboard](https://dashboard.bugster.dev).
+- Prompt for your API key. You can find it in your [Bugster dashboard](https://gui.bugster.dev).
 - Create a `.bugster` directory for configuration and tests.
 - Ask for your application's base URL (e.g., `http://localhost:3000`).
 
-### 2. Generate Your First Tests
+<Info>
+  The base URL you provide is used for running tests locally or in your dev environment. If you set up GitHub integration, Bugster will automatically run tests on your Vercel preview deployments for each pull request.
+</Info>
+
+### 2. (Recommended) Install the GitHub App for PR Previews
+
+To get the most out of Bugster, connect your GitHub repository so Bugster can run tests automatically on every PR preview (e.g., Vercel deployments):
+
+<Steps>
+  <Step title="Open the Bugster Dashboard">
+    Go to [https://gui.bugster.dev](https://gui.bugster.dev) and select your project.
+  </Step>
+  <Step title="Go to GitHub Integration">
+    In the Overview page, find the "GitHub Integration" section and click <b>Manage Integrations</b>.
+  </Step>
+  <Step title="Install the GitHub App">
+    Follow the prompts to install the Bugster GitHub App and grant access to the specific repository you want to connect.
+  </Step>
+</Steps>
+
+<Info>
+  <b>Recommended:</b> Install the Bugster GitHub App to enable automatic test runs on every Vercel preview for your pull requests. Go to the <b><a href="/integrations/github">GitHub Integration</a></b> section in the Overview page at <a href="https://gui.bugster.dev" target="_blank">gui.bugster.dev</a>, click <b>Manage Integrations</b>, and grant access to your repository.
+</Info>
+
+### 3. Generate Your First Tests
 
 ```bash
 bugster generate
@@ -35,97 +59,8 @@ Bugster analyzes your codebase and creates test specifications in the `.bugster/
   Use `bugster generate --show-logs` to see what Bugster discovers in your code.
 </Tip>
 
-### 3. Run Your Tests
+### 4. Run Your Tests
 
 ```bash
 bugster run
 ```
-
-For your first run, try:
-```bash
-bugster run --stream-results
-```
-
-    <Note>
-  Make sure your application is running on the base URL you specified (e.g., `http://localhost:3000`).
-    </Note>
-
----
-
-## Common Scenarios
-
-**Testing a Local Development Server:**
-```bash
-# Start your dev server first
-npm run dev
-
-# In another terminal
-bugster run --base-url http://localhost:3000
-```
-
-**Testing a Staging Environment:**
-```bash
-bugster run --base-url https://staging.yourapp.com
-```
-
-**Debugging Test Failures:**
-```bash
-# Run with detailed output
-bugster run --show-logs --stream-results
-
-# Run without headless mode to see what's happening
-bugster run
-```
-
-**Updating Tests After Code Changes:**
-```bash
-# Update tests for code changes
-bugster update
-
-# Run updated tests
-bugster run
-```
-
----
-
-## Typical Workflow
-
-```bash
-# 1. One-time setup: initialize and authenticate
-bugster init
-
-# 2. Generate initial tests
-bugster generate
-
-# 3. Run tests
-bugster run
-
-# 4. After making code changes
-bugster update
-bugster run
-
-# 5. Share with team (optional)
-bugster sync
-```
-
----
-
-## Next Steps
-
-<CardGroup cols={2}>
-  <Card title="Test Maintenance" icon="wrench" href="/commands/test-maintenance">
-    Learn how to update tests as your code evolves
-</Card>
-
-  <Card title="Team Collaboration" icon="users" href="/commands/team-collaboration">
-    Set up test synchronization for your team
-</Card>
-
-  <Card title="CLI Reference" icon="book" href="/cli-usage-reference">
-    Complete documentation of all commands
-</Card>
-
-  <Card title="GitHub Integration" icon="github" href="/integrations/github">
-    Automatically run tests on deployments
-</Card>
-</CardGroup>

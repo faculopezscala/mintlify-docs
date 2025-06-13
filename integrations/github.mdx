@@ -3,34 +3,44 @@ title: 'GitHub Integration'
 description: 'Automatically run tests on deployments with GitHub App integration'
 ---
 
+<Info>
+  <b>Recommended:</b> Install the Bugster GitHub App to enable automatic test runs on every Vercel preview for your pull requests. Go to the <b><a href="/integrations/github">GitHub Integration</a></b> section in the Overview page at <a href="https://gui.bugster.dev" target="_blank">gui.bugster.dev</a>, click <b>Manage Integrations</b>, and grant access to your repository.
+</Info>
+
 Bugster integrates with GitHub to automatically run tests when deployments are created, providing immediate feedback on your application's functionality.
 
-## Prerequisites
+## How to Set Up GitHub Integration
 
 <Steps>
-  <Step title="Install GitHub App">
-    Go to the overview section in [gui.bugster.dev](https://gui.bugster.dev) and click on "manage connections" in the GitHub app section. On GitHub, authenticate for the specific repository you want Bugster to work with.
-    
+  <Step title="Open the Bugster Dashboard">
+    Go to [https://gui.bugster.dev](https://gui.bugster.dev) and select your project.
+  </Step>
+  <Step title="Go to GitHub Integration">
+    In the Overview page, find the "GitHub Integration" section and click <b>Manage Integrations</b>.
+  </Step>
+  <Step title="Install the GitHub App">
+    Follow the prompts to install the Bugster GitHub App and grant access to the specific repository you want to connect.
     <Warning>
       You must grant access to specific repositories only. Granting access to all repositories won't work with Bugster.
     </Warning>
   </Step>
-  
-  <Step title="Initialize Bugster">
+  <Step title="Initialize Bugster (if not already)">
     Your repository must have a `.bugster` folder in the root directory:
     ```bash
     bugster init
     ```
   </Step>
-  
   <Step title="Vercel Setup (if applicable)">
     If using Vercel previews, disable preview protection to allow Bugster access.
-    
     <Note>
       We're working on implementing bypass protection features to avoid this requirement.
     </Note>
   </Step>
 </Steps>
+
+<Info>
+  The base URL you provide during `bugster init` is used for running tests locally or in your dev environment. With GitHub integration, Bugster will automatically run tests on your Vercel preview deployments for each pull request and report results directly in your PRs.
+</Info>
 
 ## How It Works
 
@@ -41,7 +51,7 @@ Bugster automatically runs tests when GitHub receives a `deployment_status` even
 - **Any platform** that triggers GitHub deployment events
 
 <Warning>
-  Tests run on **any deployment**, not just pull requests. If there's an open PR for that deployment, results will be posted as comments.
+  Tests run on <b>any deployment</b>, not just pull requests. If there's an open PR for that deployment, results will be posted as comments.
 </Warning>
 
 ## Vercel Integration
