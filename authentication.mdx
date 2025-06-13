@@ -1,65 +1,60 @@
 ---
 title: 'Authentication'
-description: 'Connect your CLI to your Bugster account'
+description: 'Connect your CLI to your Bugster account by initializing your project'
 ---
 
 <Note>
-  Authentication is the **first step** you must complete before using any other Bugster CLI features.
+  Authentication is handled during project initialization. It is the **first step** you must complete before using any other Bugster CLI features.
 </Note>
 
-## Command Usage
+## How to Authenticate
 
-### `bugster auth`
-
-Connect your CLI to your Bugster account by setting up your API key.
+To authenticate the Bugster CLI, you need to run the `init` command. This command will guide you through setting up your project and connecting to your Bugster account.
 
 ```bash
-bugster auth
+bugster init
 ```
 
-**What it does:**
-- Prompts you to enter your Bugster API key
-- Validates the API key with Bugster servers  
-- Stores authentication credentials securely for future use
+During the initialization process, you will be prompted to enter your Bugster API key.
 
-## Step-by-Step Setup
+## Step-by-Step Guide
 
 <Steps>
-  <Step title="Run the auth command">
+  <Step title="Run the init command">
+    Open your terminal and run `bugster init`.
     ```bash
-    bugster auth
+    bugster init
     ```
   </Step>
   
   <Step title="Get your API key">
-    Find your API key in your [Bugster dashboard](https://dashboard.bugster.dev) under Account Settings.
+    You can find your API key in your [Bugster dashboard](https://dashboard.bugster.dev) under the Account Settings section.
   </Step>
   
   <Step title="Enter your API key">
-    Paste your API key when prompted and press Enter.
+    Paste your API key when prompted by the CLI and press Enter. The CLI will validate the key and store it securely for future use.
   </Step>
 </Steps>
 
-## Common Issues
+## Troubleshooting
 
 **Invalid API Key:**
-- Double-check your API key in the Bugster dashboard
-- Make sure you're copying the entire key
+- If you enter an invalid key, the `init` command will report an error. Double-check your API key in the Bugster dashboard and try running `bugster init` again.
+- Make sure you are copying the entire key without any extra spaces.
 
 **Network Issues:**
-- Check your internet connection
-- Try again after a few minutes
+- The CLI needs to connect to Bugster servers to validate the API key. Ensure you have an active internet connection.
 
 ## Next Steps
 
-Once authenticated, you're ready to:
+Once your project is initialized and you are authenticated, you're ready to:
 
 <CardGroup cols={2}>
-  <Card title="Initialize a Project" icon="gear" href="/commands/project-setup">
-    Set up Bugster in your codebase
+  <Card title="Generate Tests" icon="magnifying-glass" href="/cli-usage-reference#test-generation--analysis">
+    Start generating tests from your codebase.
   </Card>
   
-  <Card title="Complete Quickstart" icon="rocket" href="/quickstart">
-    Follow the full getting started guide
+  <Card title="View All Commands" icon="terminal" href="/cli-usage-reference">
+    Explore all the available CLI commands.
   </Card>
 </CardGroup> 

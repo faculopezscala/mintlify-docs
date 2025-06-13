@@ -11,24 +11,19 @@ description: 'Get started with Bugster CLI in under 5 minutes'
 
 Get up and running with Bugster CLI in just a few commands.
 
-### 1. Authenticate with Bugster
-
-```bash
-bugster auth
-```
-
-Enter your API key when prompted. Find it in your [Bugster dashboard](https://dashboard.bugster.dev) under Account Settings.
-
-### 2. Initialize Your Project
+### 1. Initialize Your Project & Authenticate
 
 ```bash
 cd your-project-directory
 bugster init
 ```
 
-This creates a `.bugster` directory and prompts you for your application's base URL (e.g., `http://localhost:3000`).
+This command will:
+- Prompt for your API key. You can find it in your [Bugster dashboard](https://dashboard.bugster.dev).
+- Create a `.bugster` directory for configuration and tests.
+- Ask for your application's base URL (e.g., `http://localhost:3000`).
 
-### 3. Generate Your First Tests
+### 2. Generate Your First Tests
 
 ```bash
 bugster generate
@@ -40,7 +35,7 @@ Bugster analyzes your codebase and creates test specifications in the `.bugster/
   Use `bugster generate --show-logs` to see what Bugster discovers in your code.
 </Tip>
 
-### 4. Run Your Tests
+### 3. Run Your Tests
 
 ```bash
 bugster run
@@ -96,8 +91,7 @@ bugster run
 ## Typical Workflow
 
 ```bash
-# 1. One-time setup
-bugster auth
+# 1. One-time setup: initialize and authenticate
 bugster init
 
 # 2. Generate initial tests

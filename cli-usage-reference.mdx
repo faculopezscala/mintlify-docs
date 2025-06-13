@@ -16,38 +16,14 @@ The following options are available for all Bugster CLI commands:
 
 ## Commands Overview
 
-The Bugster CLI provides a comprehensive set of commands for authentication, project setup, test generation, execution, and synchronization. Here are all available commands:
-
-## Authentication
-
-### `bugster auth`
-
-<Card title="Authenticate with Bugster" icon="key">
-  Connect your CLI to your Bugster account by setting up your API key. This is the first command you should run.
-</Card>
-
-```bash
-bugster auth
-```
-
-**What it does:**
-- Prompts you to enter your Bugster API key
-- Validates the API key with Bugster servers  
-- Stores authentication credentials for future use
-- Sets up the connection between your local CLI and Bugster platform
-
-<Tip>
-  You must authenticate before using other Bugster CLI features that require API access.
-</Tip>
-
----
+The Bugster CLI provides a comprehensive set of commands for project setup, test generation, execution, and synchronization. Here are all available commands:
 
 ## Project Initialization
 
 ### `bugster init`
 
-<Card title="Initialize Bugster Configuration" icon="gear">
-  Set up the necessary configuration files and directory structure for using Bugster in your project.
+<Card title="Initialize Bugster in your project" icon="gear">
+  Set up your project and authenticate with Bugster. This is the first command you should run.
 </Card>
 
 ```bash
@@ -55,6 +31,9 @@ bugster init
 ```
 
 **What it does:**
+- Prompts you to enter your Bugster API key
+- Validates the API key with Bugster servers  
+- Stores authentication credentials for future use
 - Creates `.bugster` directory in your project root
 - Sets up configuration files (`config.yaml`)
 - Initializes project-specific settings
@@ -68,6 +47,10 @@ bugster init
 ├── tests/          # Generated test specifications
 └── cache/          # Analysis cache files
 ```
+
+<Tip>
+  You must run `init` to authenticate before using other Bugster CLI features that require API access.
+</Tip>
 
 ---
 
@@ -281,16 +264,13 @@ bugster sync --clean-remote
 <AccordionGroup>
   <Accordion icon="rocket" title="Getting Started">
     ```bash
-    # 1. Authenticate with your API key (FIRST STEP)
-    bugster auth
-    
-    # 2. Initialize project
+    # 1. Initialize project and authenticate (FIRST STEP)
     bugster init
     
-    # 3. Generate initial test specs
+    # 2. Generate initial test specs
     bugster generate
     
-    # 4. Run the generated tests
+    # 3. Run the generated tests
     bugster run
     ```
   </Accordion>
@@ -384,7 +364,7 @@ The `config.yaml` file contains:
 <AccordionGroup>
   <Accordion icon="exclamation-triangle" title="Common Issues">
     **Authentication Problems:**
-    - Verify your API key is correct: `bugster auth`
+    - If you entered an incorrect API key, run `bugster init` again to re-authenticate.
     - Check network connectivity to Bugster servers
 
     **Configuration Issues:**
@@ -415,10 +395,7 @@ The `config.yaml` file contains:
 
   <Accordion icon="refresh" title="Reset and Recovery">
     ```bash
-    # Reset authentication
-    bugster auth
-    
-    # Reinitialize project (preserves tests)
+    # Reinitialize project (this also allows re-authentication)
     bugster init
     
     # Force regenerate all tests
